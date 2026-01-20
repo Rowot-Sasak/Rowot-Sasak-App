@@ -1,0 +1,52 @@
+import clientPromise from "../../../lib/mongodb";
+import { ObjectId } from "mongodb";
+import jwt from "jsonwebtoken";
+
+export default async function handler(req, res) {
+  const client = await clientPromise;
+  const db = client.db("DatabaseRowotSasak");
+  const budaya = db.collection("budaya");
+  const admins = db.collection("admins");
+
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    const admin = await admins.findOne({ _id: new ObjectId(decoded.adminId) });
+    if (!admin) return res.status(403).json({ message: "Forbidden: not an admin" });
+
+    if (req.method === "POST") {
+      const { judul, isi } = req.body;
+      if (!judul || !isi) return res.status(400).json({ message: "Both 'judul' and 'isi' required" });
+
+      const result = await budaya.insertOne({ judul, isi, createdAt: new Date() });
+      return res.status(201).json({ message: "Budaya created", id: result.insertedId });
+
+    } else if (req.method === "DELETE") {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ message: "ID required" });
+
+      const result = await budaya.deleteOne({ _id: new ObjectId(id) });
+      if (result.deletedCount === 0) return res.status(404).json({ message: "Budaya not found" });
+
+      return res.status(200).json({ message: "Budaya deleted" });
+
+    } else {
+      return res.status(405).json({ message: "Method not allowed" });
+    }
+
+  } catch (err) {
+    console.error(err);
+    return res.status(err.status || 500).json({ message: err.message || "Internal Server Error" });
+  }
+}
