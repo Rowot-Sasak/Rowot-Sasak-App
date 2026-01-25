@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const { email, password } = req.body;
   const client = await clientPromise;
-  const db = client.db("DatabaseRowotSasak");
+  const db = client.db("RowotSasak");
   const admins = db.collection("admins");
 
   const admin = await admins.findOne({ email });

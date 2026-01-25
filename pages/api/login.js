@@ -1,5 +1,7 @@
 import clientPromise from "../../lib/mongodb";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -14,16 +16,18 @@ export default async function handler(req, res) {
     }
 
     const client = await clientPromise;
-    const db = client.db("DatabaseRowotSasak");
+    
+    const db = client.db("RowotSasak");
     const users = db.collection("users");
 
     const user = await users.findOne({ email });
-
+    
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
-
-    if (password && user.password !== password) {
+    
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid password" });
     }
 

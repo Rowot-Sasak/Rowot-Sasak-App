@@ -3,7 +3,7 @@ import clientPromise from "../../lib/mongodb";
 export default async function handler(req, res) {
   try {
     const client = await clientPromise;
-    const db = client.db("DatabaseRowotSasak");
+    const db = client.db("RowotSasak");
     const kalender = db.collection("kalender");
 
     const { bulan, tahun } = req.query;

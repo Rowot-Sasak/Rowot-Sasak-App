@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
   const client = await clientPromise;
-  const db = client.db("DatabaseRowotSasak");
+  const db = client.db("RowotSasak");
   const events = db.collection("events");
   const admins = db.collection("admins"); 
 
@@ -26,10 +26,10 @@ export default async function handler(req, res) {
     if (!admin) return res.status(403).json({ message: "Forbidden: not an admin" });
 
     if (req.method === "POST") {
-      const { judul, isi, time } = req.body;
-      if (!judul || !isi || !time) return res.status(400).json({ message: "judul, isi, and time required" });
+      const { judul,lokasi, isi, time,imagelink } = req.body;
+      if (!judul|| !lokasi || !imagelink|| !isi || !time) return res.status(400).json({ message: "judul, lokasi, foto, isi, and time required" });
 
-      const result = await events.insertOne({ judul, isi, time, createdAt: new Date() });
+      const result = await events.insertOne({ judul,lokasi, isi, time, createdAt: new Date() });
       return res.status(201).json({ message: "Event created", id: result.insertedId });
 
     } else if (req.method === "DELETE") {

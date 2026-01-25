@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     if (!userId) return res.status(401).json({ message: "Invalid token: no userId" });
 
     const client = await clientPromise;
-    const db = client.db("DatabaseRowotSasak");
+    const db = client.db("RowotSasak");
     const surveysAnswers = db.collection("surveys_answers");
     const users = db.collection("users");
 

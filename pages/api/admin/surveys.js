@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
   const client = await clientPromise;
-  const db = client.db("DatabaseRowotSasak");
+  const db = client.db("RowotSasak");
   const surveys = db.collection("surveys");
   const admins = db.collection("admins");
 

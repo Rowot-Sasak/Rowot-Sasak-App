@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     if (!email || !otp) return res.status(400).json({ message: "Email and OTP required" });
 
     const client = await clientPromise;
-    const db = client.db("DatabaseRowotSasak");
+    const db = client.db("RowotSasak");
     const users = db.collection("users");
 
     const user = await users.findOne({ email });
