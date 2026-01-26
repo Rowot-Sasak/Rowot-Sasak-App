@@ -2,12 +2,12 @@ import { GetKalender } from "../../lib/kalender/former";
 
 export default async function handler(req, res) {
   try {
-    const { bulan,tahun } = req.query;
-    if (!bulan||!tahun) {
-      return res.status(400).json({ message: "bulan atau tahun kosong" });
+    const { bulan,tahun,hari } = req.query;
+    if (!bulan||!tahun||!hari) {
+      return res.status(400).json({ message: "hari, bulan atau tahun kosong" });
     }
     
-    const result = GetKalender(bulan,tahun);
+    const result = GetKalender(bulan,tahun,hari);
 
     return res.status(200).json({result});
 

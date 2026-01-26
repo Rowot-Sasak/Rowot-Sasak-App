@@ -1,6 +1,6 @@
 import clientPromise from "../../lib/mongodb";
-import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
+import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
 export default async function handler(req, res) {
