@@ -16,27 +16,15 @@ export default async function handler(req, res) {
       .find({ time: { $gte: startOfDay, $lt: endOfDay } })
       .sort({ time: 1 })
       .toArray();
-
-    if(todaysEvents.length!=0){
-
-    res.status(200).json({
-      date: startOfDay.toISOString().split("T")[0],
-      totalEvents: todaysEvents.length,
-      events: todaysEvents,
-    });
-    }else{
     const randomBudaya = await budayaCol
       .aggregate([{ $sample: { size: 5 } }])
       .toArray();
     res.status(200).json({
-      
       date: startOfDay.toISOString().split("T")[0],
       totalEvents: todaysEvents.length,
-      events: "Tidak Ada Event Hari ini",
-      budaya:randomBudaya
+      events: todaysEvents,
+      budaya: randomBudaya
     });
-
-    }
 
   } catch (err) {
     console.error(err);
