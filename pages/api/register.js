@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     await users.insertOne({
       name,
       email,
+      profileImage:"https://ik.imagekit.io/RowotSasak/Default_ProPic.jpg",
       password: hashedPassword,
       isVerified: false,
       otp,
