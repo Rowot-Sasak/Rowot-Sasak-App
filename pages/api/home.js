@@ -17,16 +17,26 @@ export default async function handler(req, res) {
       .sort({ time: 1 })
       .toArray();
 
-    const randomBudaya = await budayaCol
-      .aggregate([{ $sample: { size: 5 } }])
-      .toArray();
+    if(todaysEvents.length!=0){
 
     res.status(200).json({
       date: startOfDay.toISOString().split("T")[0],
       totalEvents: todaysEvents.length,
       events: todaysEvents,
-      budaya: randomBudaya
     });
+    }else{
+    const randomBudaya = await budayaCol
+      .aggregate([{ $sample: { size: 5 } }])
+      .toArray();
+    res.status(200).json({
+      
+      date: startOfDay.toISOString().split("T")[0],
+      totalEvents: todaysEvents.length,
+      events: "Tidak Ada Event Hari ini",
+      budaya:randomBudaya
+    });
+
+    }
 
   } catch (err) {
     console.error(err);
