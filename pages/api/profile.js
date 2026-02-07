@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
       const user = await users.findOne(
         { _id: new ObjectId(decoded.userId) },
-        { projection: { name: 1, profileImage: 1 } }
+        { projection: { name: 1, profileImage: 1, email: 1 } }
       );
 
       if (!user) {
@@ -44,6 +44,7 @@ export default async function handler(req, res) {
 
       return res.status(200).json({
         name: user.name,
+        email: user.email,
         profileImage: user.profileImage || null
       });
     }
