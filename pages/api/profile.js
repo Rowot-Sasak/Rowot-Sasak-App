@@ -68,7 +68,7 @@ export default async function handler(req, res) {
         const updateData = {};
 
         if (fields.name) {
-          updateData.name = fields.name;
+          updateData.name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
         }
         if (files.file) {
           const file = files.file[0];
