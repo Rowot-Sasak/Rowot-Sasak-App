@@ -47,6 +47,8 @@ export default async function handler(req, res) {
     else if (req.method === "PUT") {
       const { surveyId, questionId, question, choices } = req.body;
       if (!surveyId || !questionId) return res.status(400).json({ message: "surveyId dan questionId wajib diisi" });
+      console.log("tes", questionId);
+      
 
       const updateObj = {};
       if (question) updateObj["questions.$.question"] = question;

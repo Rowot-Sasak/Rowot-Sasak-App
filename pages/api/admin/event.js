@@ -29,8 +29,34 @@ export default async function handler(req, res) {
       const { judul,lokasi, isi, time,imagelink } = req.body;
       if (!judul|| !lokasi || !imagelink|| !isi || !time) return res.status(400).json({ message: "judul, lokasi, foto, isi, and time required" });
 
-      const result = await events.insertOne({ judul,lokasi, isi, time, createdAt: new Date() });
+      const result = await events.insertOne({ judul,lokasi, isi, time, imagelink, createdAt: new Date() });
       return res.status(201).json({ message: "Event created", id: result.insertedId });
+    } else if (req.method === "PUT") {
+      const { id, judul, lokasi, isi, time, imagelink } = req.body;
+
+      if (!id || !ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "A valid ID is required for update" });
+      }
+
+      const updateData = {};
+      if (judul) updateData.judul = judul;
+      if (lokasi) updateData.lokasi = lokasi;
+      if (isi) updateData.isi = isi;
+      if (time) updateData.time = new Date(time);
+      if (imagelink) updateData.imagelink = imagelink;
+      
+      updateData.updatedAt = new Date();
+
+      const result = await events.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updateData }
+      );
+
+
+      return res.status(200).json({ 
+        message: "Event updated successfully",
+        modifiedCount: result.modifiedCount 
+      });
 
     } else if (req.method === "DELETE") {
       const { id } = req.body;

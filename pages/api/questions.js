@@ -1,4 +1,5 @@
 import clientPromise from "../../lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
   const { survey_id } = req.query;
@@ -13,8 +14,9 @@ export default async function handler(req, res) {
     const questionsCollection = db.collection("questions");
 
     const data = await questionsCollection.findOne(
-      { survey_id: Number(survey_id) }
+      { survey_id: new ObjectId(survey_id) }
     );
+    
 
     if (!data) {
       return res.status(404).json({ message: "Questions not found" });

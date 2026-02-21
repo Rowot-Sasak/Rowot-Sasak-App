@@ -26,11 +26,36 @@ export default async function handler(req, res) {
     if (!admin) return res.status(403).json({ message: "Forbidden: not an admin" });
 
     if (req.method === "POST") {
-      const { judul, isi,Deskripsi,imagelink } = req.body;
-      if (!judul || !isi|| !Deskripsi|| !imagelink) return res.status(400).json({ message: "judul, foto, isi dan dekripsi belum lengkap" });
+      const { judul, isi, Deskripsi, imagelink } = req.body;
 
-      const result = await budaya.insertOne({ judul, isi, createdAt: new Date() });
+      if (!judul || !isi || !Deskripsi || !imagelink) return res.status(400).json({ message: "judul, foto, isi dan dekripsi belum lengkap" });
+
+      const result = await budaya.insertOne({ judul, isi, Deskripsi, imagelink, createdAt: new Date() });
       return res.status(201).json({ message: "Budaya created", id: result.insertedId });
+    } else if (req.method === "PUT") {
+      const { id, judul, isi, Deskripsi, imagelink } = req.body;
+
+      if (!id || !ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "A valid ID is required for update" });
+      }
+
+      const updateData = {};
+      if (judul) updateData.judul = judul;
+      if (isi) updateData.isi = isi;
+      if (Deskripsi) updateData.Deskripsi = Deskripsi;
+      if (imagelink) updateData.imagelink = imagelink;
+
+      updateData.updatedAt = new Date();
+
+      const result = await budaya.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updateData }
+      );
+
+      return res.status(200).json({
+        message: "Event updated successfully",
+        modifiedCount: result.modifiedCount
+      });
 
     } else if (req.method === "DELETE") {
       const { id } = req.body;
