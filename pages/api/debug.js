@@ -2,7 +2,7 @@ import clientPromise from "../../lib/mongodb";
 
 export default async function handler(req, res) {
   const client = await clientPromise;
-  const db = client.db("RowotSasak");
+  const db = client.db("RoSasak");
 
   const dbName = db.databaseName;
   const collections = await db.listCollections().toArray();
