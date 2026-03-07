@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
   try {
     const client = await clientPromise;
-    const db = client.db("RowotSasak");
+    const db = client.db();
     const usersCollection = db.collection("users");
     const adminsCollection = db.collection("admins");
     const authHeader = req.headers.authorization;

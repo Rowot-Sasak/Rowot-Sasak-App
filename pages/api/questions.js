@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const client = await clientPromise;
-    const db = client.db("RowotSasak");
+    const db = client.db();
     const questionsCollection = db.collection("questions");
 
     const data = await questionsCollection.findOne(

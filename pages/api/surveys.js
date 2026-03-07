@@ -3,7 +3,7 @@ import clientPromise from "../../lib/mongodb";
 export default async function handler(req, res) {
   try {
     const client = await clientPromise;
-    const db = client.db("RowotSasak");
+    const db = client.db();
     const events = db.collection("surveys");
 
     const data = await events.find({}).sort({ time: 1 }).toArray();

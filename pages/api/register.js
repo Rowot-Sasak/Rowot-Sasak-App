@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     if (!name || !email || !password) return res.status(400).json({ message: "All fields are required" });
 
     const client = await clientPromise;
-    const db = client.db("RowotSasak");
+    const db = client.db();
     const users = db.collection("users");
 
     const existingUser = await users.findOne({ email });

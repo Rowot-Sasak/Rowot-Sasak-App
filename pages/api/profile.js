@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const client = await clientPromise;
-    const db = client.db("RowotSasak");
+    const db = client.db();
     const users = db.collection("users");
 
     if (req.method === "GET") {
